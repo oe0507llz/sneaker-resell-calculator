@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block body %}
+	<head>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script type=text/javascript>
+			$(function() {
+			  $('a#process_input').bind('click', function() {
+				$.getJSON('/background_process', {
+				  proglang: $('input[name="proglang"]').val(),
+				}, function(data) {
+				  $("#result").html(data.result);
+				});
+				return false;
+			  });
+			});
+		</script>
+	</head>
+  
+	<body>
+		<div class='container'>
+		<h3>StockX link to check the resell profit</h3>
+			<form>
+				<input type=text size=80 name=proglang>
+				<a href=# id=process_input><button class='btn btn-default'>Submit</button></a>
+			</form>
+		<p id=result></p>
+		</div>
+	</body>
+{% endblock %}

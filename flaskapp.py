@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, request, logging
+from flask import Flask, render_template, flash, redirect, url_for, session, request, logging, jsonify
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from resellcalculator import calculate
@@ -21,17 +21,29 @@ class queryForm(Form):
     stockxLink = StringField('Stockx Link', [validators.Length(min=1, max=300)])
 
 
-@app.route('/', methods=['GET','POST'])
+@app.route('/')
 def index():
-    form = queryForm(request.form)
-    if request.method == 'POST' and form.validate():
-        stockxLink = form.stockxLink.data
-        stockxLinkList = stockxLink.split(" ")
-        trimmedStockxLink = stockxLinkList[-1]
-        print trimmedStockxLink
-        notification_list = calculate(trimmedStockxLink)
-        return '\n'.join(notification_list)
-    return render_template('index.html', form=form)
+    return render_template('interactive.html')
+
+@app.route('/background_process')
+def background_process():
+    stockxLink = request.args.get('proglang')
+    print stockxLink
+    notification_list = calculate(stockxLink)
+    return jsonify(result=notification_list)
+
+
+#@app.route('/', methods=['GET','POST'])
+#def index():
+#    form = queryForm(request.form)
+#    if request.method == 'POST' and form.validate():
+#        stockxLink = form.stockxLink.data
+#        stockxLinkList = stockxLink.split(" ")
+#        trimmedStockxLink = stockxLinkList[-1]
+#        print trimmedStockxLink
+#        notification_list = calculate(trimmedStockxLink)
+#        return '\n'.join(notification_list)
+#    return render_template('index.html', form=form)
 
 # About
 @app.route('/about')

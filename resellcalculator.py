@@ -35,7 +35,6 @@ def get_sizes_from_stockx(stockx_link):
         session.headers = {'User-Agent': ua.random}
   #      print(ua.random)
 
-        notification_list.append("===========================")
         notification_list.append(stockx_link)
 
         stockx_response = session.get(stockx_link)
