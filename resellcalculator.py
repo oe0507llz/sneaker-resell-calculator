@@ -21,15 +21,15 @@ you = "monkeyfather101@gmail.com"
 
 
 ua = UserAgent()
-proxy_manager = ProxyManager('/home/ubuntu/flaskapp/proxies.txt')
+#proxy_manager = ProxyManager('/home/ubuntu/flaskapp/proxies.txt')
 
 
 
 def get_sizes_from_stockx(stockx_link, tax):
         stockx_sizes = []
         notification_list = []
-        random_proxy = proxy_manager.random_proxy()
-        proxies = random_proxy.get_dict()
+ #       random_proxy = proxy_manager.random_proxy()
+#        proxies = random_proxy.get_dict()
  #       print(proxies)
         session = requests.Session()
         session.headers = {'User-Agent': ua.random}
