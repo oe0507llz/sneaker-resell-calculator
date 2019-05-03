@@ -20,17 +20,17 @@
 	<body>
 		<div class='container'>
 			<form>
-				StockX URL <input type=text size=50vw name=proglang> <br> <br>
-				Tax Rate <input type=text size=10 name=tax> <br><br>
+				<font size="3.5vw">	StockX URL </font> <input type=text size=40vw name=proglang> <br> <br>
+				<font size="3.5vw">Tax Rate </font> <input type=text size=10 name=tax> <br><br>
 				<a href=# id=process_input><button class='btn btn-default'>Submit</button></a>
 			</form>
 		<p id=result></p>
 		</div>
 		<br>
-		<h2>Instructions on how to use:</h2>
-		<br>
+		<font size="5vw">Instructions on how to use:</font><br>
+		<br> <font size="3.5vw">
 		Step 1: Open <a href="https://stockx.com/" target="_blank">https://stockx.com/</a> and look for the sneaker that you would like to resell. Copy the URL (e.g. https://stockx.com/air-jordan-1-retro-high-court-purple) and paste into StockX URL. <br><br>
 		Step 2: Enter the tax rate that you had to pay when you purchased the sneaker, for instance, 0.07 for NY state or 0.06 for Virginia. If no sales tax paid, enter 0 for Tax Rate. Currently, no shipping cost when you purchased the sneaker is assumed in the calculation.<br><br>
   Step 3: Click Submit. Then Sneaker Resell Calculator will fectch the Highest Bid price from StockX for each size, then calculate Resell Gain assuming StockX will take 12% commission fee. Then Resell Gain minus the purchased price (originial price multiplied by Tax Rate) will give you Resell Profit for each size when reselling your sneaker immediately on StockX. Orignial price is also known as Retail Price that our calculator is able to fetch directly from StockX.
-	</body>
+  </font>	</body>
 {% endblock %}
