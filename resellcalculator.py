@@ -25,7 +25,7 @@ proxy_manager = ProxyManager('/home/ubuntu/flaskapp/proxies.txt')
 
 
 
-def get_sizes_from_stockx(stockx_link):
+def get_sizes_from_stockx(stockx_link, tax):
         stockx_sizes = []
         notification_list = []
         random_proxy = proxy_manager.random_proxy()
@@ -35,11 +35,13 @@ def get_sizes_from_stockx(stockx_link):
         session.headers = {'User-Agent': ua.random}
   #      print(ua.random)
 
-        notification_list.append(stockx_link)
+        #notification_list.append(stockx_link + '<br>')
 
+#        try:
+#            stockx_response = session.get(stockx_link, proxies=proxies)
+#            print proxies
+#        except:
         stockx_response = session.get(stockx_link)
-        #stockx_response = session.get(stockx_link, proxies=proxies)
-        #print(stockx_response.text)
         stockx_soup = bs(stockx_response.text, 'lxml')
    #     print(stockx_response.status_code)
         windowPreloaded = False
@@ -57,27 +59,35 @@ def get_sizes_from_stockx(stockx_link):
                         title = data['product']['name']
                         style_id = data['product']['styleId']
                         retailPrice = data['product']['retailPrice']
-                        taxedRetail = round(retailPrice * 1.07, 2)
-    #                    print("{} {} retail price is ${} while taxed price is ${}".format(title, style_id, retailPrice, taxedRetail))
-                        notification_list.append("{} {} retail price is ${} while taxed price is ${}".format(title, style_id, retailPrice, taxedRetail))
+                        taxedRetail = round(retailPrice * (1 + float(tax)), 2)
+                        notification_list.append("<br>{} {} <br><br>Retail price is ${} while taxed price is ${}<br><br>".format(title, style_id, retailPrice, taxedRetail))
                         data_children = data['product']['children']
-                        for child in data_children.keys():
+                        notification_list.append('''<table><tr><th style="width: 40px" align="center">Size</th><th style="width: 100px" align="center">Highest Bid</th><th style="width: 100px" align="center">Resell Gain</th><th style="width: 100px" align="center">Resell Profit</th></tr>''')
+                        for child in data_children:
                                 bid_size = data_children[child]['market']['highestBidSize']
                                 highest_bid = data_children[child]['market']['highestBid']
                                 resell_gain = round(highest_bid * 0.88, 2)
                                 if bid_size and (resell_gain > taxedRetail):
                                         stockx_sizes.append(bid_size)
                                         resell_profit = round(resell_gain - taxedRetail, 2)
-     #                                   print("Size {} highest bid is ${} while resell gain is ${} and resell profit is {}".format(bid_size, highest_bid, resell_gain, resell_profit))
-                                        notification_list.append("Size {} highest bid is ${} while resell gain is ${} and resell profit is {}".format(bid_size, highest_bid, resell_gain, resell_profit))
+                                        notification_list.append('''<tr><td style="width: 40px" align="center">{}</td><td style="width: 100px" align="center">${}</td><td style="width: 100px" align="center">${}</td><td style="width: 100px" align="center">${}</td></tr>'''.format(bid_size, highest_bid, resell_gain, resell_profit))
+        notification_list.append('</table>')
         if not windowPreloaded:
                 stockx_sizes.append('all')
       #          print('window.Preloaded not found')
-                notification_list.append("StockX window.Preloaded not found")
+                notification_list.append("Try it again.")
+        else:
+            stockx_sizes.sort()
+            if not all("1" in size for size in stockx_sizes):
+                while "1" in stockx_sizes[0]:
+                    size_tmp = stockx_sizes.pop(0)
+                    stockx_sizes.append(size_tmp)
+            stockx_sizes_string = 'Profitable sizes include: ' + ' '.join(stockx_sizes) + '<br><br>'
+            notification_list.insert(1, stockx_sizes_string)
         return stockx_sizes, notification_list
 
 notification_sum = []
-def calculate(styleCode):
+def calculate(styleCode, tax):
     if 'stockx' in styleCode:
         #requests_response = requests.get(styleCode)
         #print(requests_response.text)
@@ -86,5 +96,5 @@ def calculate(styleCode):
         search_response = requests.get('https://stockx.com/search?s={}'.format(styleCode))
        # print(search_response.text)
         search_soup = bs(search_response.text, 'lxml')
-    stockx_sizes, notification_list = get_sizes_from_stockx(stockx_link)
+    stockx_sizes, notification_list = get_sizes_from_stockx(stockx_link, tax)
     return notification_list
