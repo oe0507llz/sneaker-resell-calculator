@@ -8,12 +8,12 @@ print("==============================")
 print(datetime.datetime.now())
 
 
-response = requests.get("https://sneakerresellcalculator.com/background_process?proglang=https%3A%2F%2Fstockx.com%2Fnike-air-fear-of-god-strap-light-bone&tax=0.07")
+response = requests.get("https://sneakerresellcalculator.com/background_process?proglang=https%3A%2F%2Fstockx.com%2Fair-jordan-1-retro-high-court-purple-gs&tax=0.07")
 print(response.text)
 
 me = 'sneakerresellcalculator@gmail.com'
 you = 'sneakerresellcalculator@gmail.com'
-if response.status_code == 200:
+if response.status_code == 200 and "Try it again" not in response.text:
     print("Success!")
     msg = MIMEText('Daily test passed')
 
