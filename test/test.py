@@ -13,14 +13,12 @@ print(response.text)
 
 me = 'sneakerresellcalculator@gmail.com'
 you = 'sneakerresellcalculator@gmail.com'
-if response.status_code == 200 and "Try it again" not in response.text:
-    print("Success!")
-    msg = MIMEText('Daily test passed')
+msg = MIMEText(response.text)
 
-    msg['Subject'] = "Sneaker Calculator working properly!"
-    msg['From'] = me
-    msg['To'] = you
-    p = Popen(["/usr/sbin/sendmail", "-t", "-oi"], stdin=PIPE, universal_newlines=True)
-    p.communicate(msg.as_string())
+msg['Subject'] = "Sneaker Calculator Result"
+msg['From'] = me
+msg['To'] = you
+p = Popen(["/usr/sbin/sendmail", "-t", "-oi"], stdin=PIPE, universal_newlines=True)
+p.communicate(msg.as_string())
 
 
