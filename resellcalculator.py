@@ -15,11 +15,6 @@ from subprocess import Popen, PIPE
 #print(datetime.datetime.now())
 
 
-me = "luozhou.li@gmail.com"
-you = "monkeyfather101@gmail.com"
-
-
-
 ua = UserAgent()
 #proxy_manager = ProxyManager('/home/ubuntu/flaskapp/proxies.txt')
 
